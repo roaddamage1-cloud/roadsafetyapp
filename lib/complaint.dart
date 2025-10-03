@@ -8,7 +8,7 @@ class Complaint extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Colors.redAccent,
-        title: Text("FEEDBACK"),
+        title: Text("COMPLAINT"),
         centerTitle: true,
       ),
       body: Padding(
