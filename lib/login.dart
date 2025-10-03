@@ -28,7 +28,7 @@ class Loginscreen extends StatelessWidget {
                 border: OutlineInputBorder(),
               ),
             ),
-            ElevatedButton(onPressed: (){}, child: Text("login"))
+            ElevatedButton(onPressed: (){}, child: Text("LOGIN"))
           ],
         ),
       ),
