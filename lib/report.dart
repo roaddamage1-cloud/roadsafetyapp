@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 
-class Alert extends StatelessWidget {
-  const Alert({super.key});
+class Report extends StatelessWidget {
+  const Report({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor:Colors.amber,
-        title: Text("ALERT"),
+            appBar: AppBar(
+        backgroundColor:Colors.deepOrange,
+        title: Text("REPORT"),
         centerTitle: true,
       ),
       body: Padding(
@@ -18,6 +18,13 @@ class Alert extends StatelessWidget {
             TextFormField(
               decoration: InputDecoration(
                 hintText: "ID:",
+                border: OutlineInputBorder()
+              ),
+            ),
+            SizedBox(height: 10,),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: "INCIDENT:",
                 border: OutlineInputBorder()
               ),
             ),
@@ -38,21 +45,23 @@ class Alert extends StatelessWidget {
             SizedBox(height: 10,),
             TextFormField(
               decoration: InputDecoration(
-                hintText: "INCIDENT:",
+                hintText: "PHONE NUMBER:",
                 border: OutlineInputBorder()
               ),
             ),
             SizedBox(height: 10,),
             TextFormField(
               decoration: InputDecoration(
-                hintText: "PHONE NUMBER:",
+                hintText: "DESCRIPTION:",
                 border: OutlineInputBorder()
               ),
             ),
+
             ElevatedButton(onPressed: (){}, child: Text("SUBMIT"))
           ],
         ) ,
       ),
+
     );
   }
 }

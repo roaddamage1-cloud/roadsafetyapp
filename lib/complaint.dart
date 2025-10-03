@@ -1,57 +1,50 @@
 import 'package:flutter/material.dart';
 
-class Alert extends StatelessWidget {
-  const Alert({super.key});
+class Complaint extends StatelessWidget {
+  const Complaint({super.key});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor:Colors.amber,
-        title: Text("ALERT"),
+        backgroundColor: Colors.redAccent,
+        title: Text("FEEDBACK"),
         centerTitle: true,
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
-        child:Column(
+        child: Column(
           children: [
             TextFormField(
               decoration: InputDecoration(
                 hintText: "ID:",
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10,),
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: "TIME:",
-                border: OutlineInputBorder()
-              ),
-            ),
-            SizedBox(height: 10,),
-            TextFormField(
-              decoration: InputDecoration(
-                hintText: "PLACE:",
-                border: OutlineInputBorder()
-              ),
-            ),
-            SizedBox(height: 10,),
+            SizedBox(height: 5,),
             TextFormField(
               decoration: InputDecoration(
                 hintText: "INCIDENT:",
-                border: OutlineInputBorder()
+                border: OutlineInputBorder(),
               ),
             ),
-            SizedBox(height: 10,),
+            SizedBox(height: 5,),
             TextFormField(
               decoration: InputDecoration(
-                hintText: "PHONE NUMBER:",
-                border: OutlineInputBorder()
+                hintText: "DESCRIPTION:",
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 5,),
+            TextFormField(
+              decoration: InputDecoration(
+                hintText: "STATUS:",
+                border: OutlineInputBorder(),
               ),
             ),
             ElevatedButton(onPressed: (){}, child: Text("SUBMIT"))
           ],
-        ) ,
+        ),
       ),
     );
   }
