@@ -2,10 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:roadsafetyapp/alert.dart';
 import 'package:roadsafetyapp/feedback.dart';
+import 'package:roadsafetyapp/homescreen.dart';
 import 'package:roadsafetyapp/login.dart';
 import 'package:roadsafetyapp/mapview.dart';
 import 'package:roadsafetyapp/register.dart';
 import 'package:roadsafetyapp/report.dart';
+import 'package:roadsafetyapp/viewcontacts.dart';
+import 'package:roadsafetyapp/viewreports.dart';
 
 void main() {
   runApp(const MyApp());
@@ -37,7 +40,7 @@ class MyApp extends StatelessWidget {
         // tested with just a hot reload.
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
       ),
-      home:Mapview()
+      home:HomeScreen()
     );
   }
 }
