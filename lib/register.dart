@@ -154,6 +154,20 @@ class _RegisterState extends State<Register> {
                     },
                     icon: Icons.email,
                   ),
+                      const SizedBox(height: 16),
+                       _buildTextField(
+                    controller: _passwordController,
+                    label: 'Username',
+                    hint: 'Enter your Username',
+                    obscureText: true,
+                     validator: (value) {
+                      if (value == null || value.trim().isEmpty) {
+                        return 'Please enter your username';
+                      }
+                      return null;
+                    },
+                    icon: Icons.home,
+                  ),
                   const SizedBox(height: 16),
                   _buildTextField(
                     controller: _passwordController,
@@ -171,23 +185,7 @@ class _RegisterState extends State<Register> {
                     },
                     icon: Icons.lock,
                   ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _confirmPasswordController,
-                    label: 'Confirm Password',
-                    hint: 'Re-enter your password',
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please confirm your password';
-                      }
-                      if (value != _passwordController.text) {
-                        return 'Passwords do not match';
-                      }
-                      return null;
-                    },
-                    icon: Icons.lock_outline,
-                  ),
+                 
                   const SizedBox(height: 30),
                   SizedBox(
                     width: double.infinity,

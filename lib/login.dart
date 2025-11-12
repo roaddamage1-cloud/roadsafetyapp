@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:roadsafetyapp/homescreen.dart';
+import 'package:roadsafetyapp/register.dart';
 
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
@@ -17,7 +19,7 @@ class _LoginscreenState extends State<Loginscreen> {
       body: Container(
         decoration: const BoxDecoration(
           gradient: LinearGradient(
-            colors: [Colors.pinkAccent, Colors.purpleAccent],
+            colors: [Color.fromARGB(255, 53, 2, 73), Color.fromARGB(255, 224, 59, 253)],
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
           ),
@@ -42,7 +44,7 @@ class _LoginscreenState extends State<Loginscreen> {
                       style: TextStyle(
                         fontSize: 28,
                         fontWeight: FontWeight.bold,
-                        color: Colors.pinkAccent,
+                        color: Color.fromARGB(255, 57, 4, 71),
                       ),
                     ),
                     const SizedBox(height: 24),
@@ -86,7 +88,7 @@ class _LoginscreenState extends State<Loginscreen> {
                           // TODO: Implement login logic
                         },
                         style: ElevatedButton.styleFrom(
-                          backgroundColor: Colors.pinkAccent,
+                          backgroundColor: const Color.fromARGB(255, 120, 95, 188),
                           padding: const EdgeInsets.symmetric(vertical: 16),
                           shape: RoundedRectangleBorder(
                             borderRadius: BorderRadius.circular(12),
@@ -106,12 +108,16 @@ class _LoginscreenState extends State<Loginscreen> {
                     const SizedBox(height: 12),
                     TextButton(
                       onPressed: () {
+                         Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => Register()),
+            );
                         // TODO: Add forgot password functionality
                       },
                       child: const Text(
-                        "Forgot Password?",
+                        "Register",
                         style: TextStyle(
-                          color: Colors.greenAccent,
+                          color: Color.fromARGB(255, 4, 51, 28),
                           decoration: TextDecoration.underline,
                         ),
                       ),
