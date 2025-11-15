@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:roadsafetyapp/homescreen.dart';
 import 'package:roadsafetyapp/register.dart';
 
+
+int? lid;
 class Loginscreen extends StatefulWidget {
   const Loginscreen({super.key});
 
@@ -11,6 +13,32 @@ class Loginscreen extends StatefulWidget {
 
 class _LoginscreenState extends State<Loginscreen> {
   bool _obscurePassword = true;
+  
+  
+
+
+  final TextEditingController _usernameController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+
+
+  Future<void> loginApi(username, password) async{
+    try {
+      
+      final response=await dio.post('$baseurl/LoginPage/', data: {
+        'Username':username,
+        'Password':password
+
+      });
+      if (response.statusCode==200 || response.statusCode==201)
+             lid = response.data['login_id'];
+
+        {
+        Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => HomeScreen(),), (route)=>false);
+      }
+    } catch (e) {
+      
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -49,6 +77,7 @@ class _LoginscreenState extends State<Loginscreen> {
                     ),
                     const SizedBox(height: 24),
                     TextFormField(
+                      controller: _usernameController,
                       decoration: InputDecoration(
                         labelText: "Username",
                         prefixIcon: const Icon(Icons.person),
@@ -59,6 +88,7 @@ class _LoginscreenState extends State<Loginscreen> {
                     ),
                     const SizedBox(height: 20),
                     TextFormField(
+                      controller:_passwordController ,
                       obscureText: _obscurePassword,
                       decoration: InputDecoration(
                         labelText: "Password",
@@ -85,7 +115,7 @@ class _LoginscreenState extends State<Loginscreen> {
                       width: double.infinity,
                       child: ElevatedButton(
                         onPressed: () {
-                          // TODO: Implement login logic
+                          loginApi(_usernameController.text, _passwordController.text);
                         },
                         style: ElevatedButton.styleFrom(
                           backgroundColor: const Color.fromARGB(255, 120, 95, 188),

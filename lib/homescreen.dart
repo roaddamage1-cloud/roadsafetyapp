@@ -1,6 +1,8 @@
 
 // Import your pages
 
+import 'package:roadsafetyapp/APi/complaint.dart';
+
 import 'report.dart';
 import 'package:flutter/material.dart';
 import 'package:roadsafetyapp/alert.dart';
@@ -46,6 +48,12 @@ class HomeScreen extends StatelessWidget {
         icon: Icons.description,
         color: const Color.fromARGB(255, 90, 58, 96),
         page: const Report(),
+      ),
+       _MenuOption(
+        title: "Complaints",
+        icon: Icons.description,
+        color: const Color.fromARGB(255, 90, 58, 96),
+        page: const Complaint(),
       ),
     ];
 

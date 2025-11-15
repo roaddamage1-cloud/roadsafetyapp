@@ -1,4 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:dio/dio.dart';
+import 'package:roadsafetyapp/login.dart';
+
+
+
+String baseurl='http://192.168.1.58:5000';
+  final dio=Dio();
+
 
 class Register extends StatefulWidget {
   const Register({super.key});
@@ -10,14 +18,19 @@ class Register extends StatefulWidget {
 class _RegisterState extends State<Register> {
   final _formKey = GlobalKey<FormState>();
 
+   // API object
+
   final TextEditingController _nameController = TextEditingController();
   final TextEditingController _ageController = TextEditingController();
   final TextEditingController _genderController = TextEditingController();
   final TextEditingController _addressController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _usernameController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
-  final TextEditingController _confirmPasswordController = TextEditingController();
+
+  bool _loading = false;
+  
 
   @override
   void dispose() {
@@ -27,203 +40,118 @@ class _RegisterState extends State<Register> {
     _addressController.dispose();
     _phoneController.dispose();
     _emailController.dispose();
+    _usernameController.dispose();
     _passwordController.dispose();
-    _confirmPasswordController.dispose();
     super.dispose();
   }
+
+  Future<void> _registerStudent() async {
+    if (!_formKey.currentState!.validate()) return;
+
+    // setState(() => _loading = true);
+
+    final Map<String, dynamic> data = {
+      "Username": _usernameController.text.trim(),
+      "Password": _passwordController.text.trim(),
+      "Name": _nameController.text.trim(),
+      "Age": _ageController.text.trim(),
+      "Gender": _genderController.text.trim(),
+      "Address": _addressController.text.trim(),
+      "Phone": _phoneController.text.trim(),
+      "Email": _emailController.text.trim(),
+     
+    };
+    print('***************************');
+    print(data);
+
+    try {
+      print('data is:');
+      final response = await dio.post("$baseurl/UserReg_api/", data: data);
+      print(response);
+
+      if (response.statusCode == 201) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(
+            content: Text("✅ Registration successful!"),
+            backgroundColor: Colors.green,
+          ),
+        );
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Loginscreen()),
+        );
+        
+      } else {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text("❌ Error: ${response.statusMessage}"),
+            backgroundColor: Colors.red,
+          ),
+        );
+      }
+    } on DioError catch (e) {
+      final message = e.response?.data.toString() ?? e.message;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text("⚠️ Failed: $message"),
+          backgroundColor: Colors.red,
+        ),
+      );
+    } finally {
+      setState(() => _loading = false);
+    }
+  }
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      // Transparent appBar with elevated shadow
       appBar: AppBar(
-        title: const Text('REGISTRATION'),
+        title: const Text("REGISTRATION"),
         centerTitle: true,
-        backgroundColor: const Color.fromARGB(255, 32, 163, 89),
-        elevation: 6,
+        backgroundColor: Colors.green,
       ),
       body: Stack(
         children: [
-          // Background Image with opacity (watermark effect)
-          Opacity(
-            opacity: 0.1,
-            child: Container(
-              decoration: const BoxDecoration(
-                image: DecorationImage(
-                  image: AssetImage('assets/road_damage_watermark.png'),
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-          ),
-          // Main form content with padding and scroll
           SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 20),
+            padding: const EdgeInsets.all(20),
             child: Form(
               key: _formKey,
               child: Column(
                 children: [
-                  _buildTextField(
-                    controller: _nameController,
-                    label: 'Name',
-                    hint: 'Enter your full name',
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your name';
-                      }
-                      return null;
-                    },
-                    icon: Icons.person,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _ageController,
-                    label: 'Age',
-                    hint: 'Enter your age',
-                    keyboardType: TextInputType.number,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your age';
-                      }
-                      final age = int.tryParse(value);
-                      if (age == null || age <= 0) {
-                        return 'Please enter a valid age';
-                      }
-                      return null;
-                    },
-                    icon: Icons.cake,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _genderController,
-                    label: 'Gender',
-                    hint: 'Enter your gender',
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please specify your gender';
-                      }
-                      return null;
-                    },
-                    icon: Icons.wc,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _addressController,
-                    label: 'Address',
-                    hint: 'Enter your address',
-                    maxLines: 2,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your address';
-                      }
-                      return null;
-                    },
-                    icon: Icons.home,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _phoneController,
-                    label: 'Phone',
-                    hint: 'Enter your phone number',
-                    keyboardType: TextInputType.phone,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your phone number';
-                      }
-                      if (!RegExp(r'^\+?\d{7,15}$').hasMatch(value)) {
-                        return 'Enter a valid phone number';
-                      }
-                      return null;
-                    },
-                    icon: Icons.phone,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _emailController,
-                    label: 'Email',
-                    hint: 'Enter your email',
-                    keyboardType: TextInputType.emailAddress,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your email';
-                      }
-                      if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
-                        return 'Enter a valid email address';
-                      }
-                      return null;
-                    },
-                    icon: Icons.email,
-                  ),
-                      const SizedBox(height: 16),
-                       _buildTextField(
-                    controller: _passwordController,
-                    label: 'Username',
-                    hint: 'Enter your Username',
-                    obscureText: true,
-                     validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter your username';
-                      }
-                      return null;
-                    },
-                    icon: Icons.home,
-                  ),
-                  const SizedBox(height: 16),
-                  _buildTextField(
-                    controller: _passwordController,
-                    label: 'Password',
-                    hint: 'Enter your password',
-                    obscureText: true,
-                    validator: (value) {
-                      if (value == null || value.trim().isEmpty) {
-                        return 'Please enter a password';
-                      }
-                      if (value.length < 6) {
-                        return 'Password must be at least 6 characters';
-                      }
-                      return null;
-                    },
-                    icon: Icons.lock,
-                  ),
-                 
+                  _field(_nameController, "Name", Icons.person),
+                  _field(_ageController, "Age", Icons.cake,
+                      type: TextInputType.number),
+                  _field(_genderController, "Gender", Icons.wc),
+                  _field(_addressController, "Address", Icons.home),
+                  _field(_phoneController, "Phone", Icons.phone,
+                      type: TextInputType.phone),
+                  _field(_emailController, "Email", Icons.email,
+                      type: TextInputType.emailAddress),
+                  _field(_usernameController, "Username", Icons.person),
+                  _field(_passwordController, "Password", Icons.lock,
+                      isPassword: true),
                   const SizedBox(height: 30),
+
+                  // Submit Button
                   SizedBox(
                     width: double.infinity,
-                    height: 56,
+                    height: 55,
                     child: ElevatedButton(
-                      style: ButtonStyle(
-                        backgroundColor:
-                            MaterialStateProperty.all(const Color.fromARGB(255, 32, 163, 89)),
-                        shape: MaterialStateProperty.all(
-                          RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(16),
-                          ),
+                      onPressed: _loading ? null : _registerStudent,
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        shape: RoundedRectangleBorder(
+                          borderRadius: BorderRadius.circular(12),
                         ),
-                        elevation: MaterialStateProperty.all(8),
-                        shadowColor:
-                            MaterialStateProperty.all(const Color.fromARGB(255, 32, 163, 89).withOpacity(0.7)),
                       ),
-                      onPressed: () {
-                        if (_formKey.currentState!.validate()) {
-                          ScaffoldMessenger.of(context).showSnackBar(
-                            const SnackBar(
-                              content: Text('Registration Successful!'),
-                              backgroundColor: Color.fromARGB(255, 32, 163, 89),
-                              behavior: SnackBarBehavior.floating,
+                      child: _loading
+                          ? const CircularProgressIndicator(color: Colors.white)
+                          : const Text(
+                              "SUBMIT",
+                              style: TextStyle(
+                                  fontSize: 18, fontWeight: FontWeight.bold),
                             ),
-                          );
-                          // TODO: Add your submit logic here
-                        }
-                      },
-                      child: const Text(
-                        'SUBMIT',
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          letterSpacing: 1.4,
-                          color: Colors.white,
-                        ),
-                      ),
                     ),
                   ),
                 ],
@@ -235,43 +163,25 @@ class _RegisterState extends State<Register> {
     );
   }
 
-  Widget _buildTextField({
-    required TextEditingController controller,
-    required String label,
-    String? hint,
-    String? Function(String?)? validator,
-    TextInputType keyboardType = TextInputType.text,
-    int maxLines = 1,
-    bool obscureText = false,
-    IconData? icon,
+  Widget _field(
+    TextEditingController controller,
+    String label,
+    IconData icon, {
+    TextInputType type = TextInputType.text,
+    bool isPassword = false,
   }) {
-    return TextFormField(
-      controller: controller,
-      keyboardType: keyboardType,
-      maxLines: maxLines,
-      obscureText: obscureText,
-      validator: validator,
-      decoration: InputDecoration(
-        labelText: label,
-        hintText: hint,
-        prefixIcon: icon != null ? Icon(icon, color: const Color.fromARGB(255, 32, 163, 89)) : null,
-        filled: true,
-        fillColor: Colors.green.shade50,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: Colors.green.shade200),
-        ),
-        focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: const Color.fromARGB(255, 32, 163, 89), width: 2),
-        ),
-        errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
-        ),
-        focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: Colors.red, width: 2),
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 16),
+      child: TextFormField(
+        controller: controller,
+        obscureText: isPassword,
+        keyboardType: type,
+        validator: (value) =>
+            value!.isEmpty ? "Please enter $label" : null,
+        decoration: InputDecoration(
+          labelText: label,
+          prefixIcon: Icon(icon, color: Colors.green),
+          border: OutlineInputBorder(borderRadius: BorderRadius.circular(12)),
         ),
       ),
     );
